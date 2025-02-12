@@ -10,6 +10,9 @@ import App from "./App.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import LogIn from "./components/LogIn.jsx";
+import UserDetails from "./components/dashboard/UserDetails.jsx";
+import Properties from "./components/Property/Properties.jsx";
+import AddPropertyForm from "./components/Property/AddPropertyForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +37,33 @@ const router = createBrowserRouter([
           <Protected authentication>
             {" "}
             <Dashboard />
+          </Protected>
+        ),
+      },
+      {
+        path: "dashboard/userDetail",
+        element: (
+          <Protected authentication>
+            {" "}
+            <UserDetails />
+          </Protected>
+        ),
+      },
+      {
+        path: "dashboard/property",
+        element: (
+          <Protected authentication>
+            {" "}
+            <Properties />
+          </Protected>
+        ),
+      },
+      {
+        path: "dashboard/property/addPropertyForm",
+        element: (
+          <Protected authentication>
+            {" "}
+            <AddPropertyForm />
           </Protected>
         ),
       },

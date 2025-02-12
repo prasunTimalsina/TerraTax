@@ -1,8 +1,9 @@
 import { useState } from "react";
 import authService from "../appwrite/auth";
+import appwriteService from "../appwrite/config";
 import { Link, useNavigate } from "react-router";
 import { login } from "../store/authSlice";
-
+import Input from "./Input";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -18,8 +19,14 @@ function SignUp() {
       const userData = await authService.createAccount(data);
       if (userData) {
         const userData = await authService.getCurrentUser();
-        if (userData) dispatch(login(userData));
-        navigate("/dashboard");
+        if (userData) {
+          appwriteService.addUserData({
+            ...data,
+            userId: userData.$id,
+          });
+          dispatch(login(userData));
+          navigate("/dashboard");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -45,25 +52,20 @@ function SignUp() {
             Sign In
           </Link>
         </p>
+        {/* Optionally display a form-level error message */}
         {error && <p className="text-red-600 text-center mb-5">{error}</p>}
 
         <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900">
-            Full Name
-          </label>
-          <input
-            type="text"
+          <Input
+            label="Full Name"
             placeholder="Enter your full name"
             {...register("name", { required: "Full name is required" })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
         </div>
 
         <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900">
-            Your Email
-          </label>
-          <input
+          <Input
+            label="Your Email"
             type="email"
             placeholder="name@example.com"
             {...register("email", {
@@ -73,19 +75,34 @@ function SignUp() {
                 message: "Enter a valid email address",
               },
             })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
         </div>
 
         <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900">
-            Password
-          </label>
-          <input
+          <Input
+            label="Phone Number"
+            type="tel"
+            placeholder="Enter your phone number"
+            {...register("phoneNumber", {
+              required: "Phone number is required",
+            })}
+          />
+        </div>
+
+        <div className="mb-5">
+          <Input
+            label="PAN Number"
+            placeholder="Enter your PAN number"
+            {...register("PANNumber", { required: "PAN number is required" })}
+          />
+        </div>
+
+        <div className="mb-5">
+          <Input
+            label="Password"
             type="password"
             placeholder="Enter your password"
             {...register("password", { required: "Password is required" })}
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
         </div>
 

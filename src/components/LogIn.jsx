@@ -17,9 +17,14 @@ function LogIn() {
     try {
       const session = await authService.login(data);
       if (session) {
-        const userData = await authService.getCurrentUser();
-        if (userData) dispatch(authLogin(userData));
-        navigate("/dashboard");
+        // Wait 500ms (adjust as needed) for the session to be fully set
+        setTimeout(async () => {
+          const userData = await authService.getCurrentUser();
+          if (userData) {
+            dispatch(authLogin(userData));
+            navigate("/dashboard");
+          }
+        }, 500);
       }
     } catch (error) {
       setError(error.message);
