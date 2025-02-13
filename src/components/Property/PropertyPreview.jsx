@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 function PropertyPreview({ property }) {
   return (
     <div className="max-w-[17rem] p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 self-start">
@@ -7,8 +9,8 @@ function PropertyPreview({ property }) {
         </h5>
       </a>
 
-      <a
-        href="#"
+      <Link
+        to={`propertyView/${property.$id}`}
         className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
         See Details
@@ -27,7 +29,7 @@ function PropertyPreview({ property }) {
             d="M1 5h12m0 0L9 1m4 4L9 9"
           />
         </svg>
-      </a>
+      </Link>
 
       <div className="bg-red-600 w-auto rounded mt-1.5 text-white text-center py-1 px-2">
         Overdue Payment

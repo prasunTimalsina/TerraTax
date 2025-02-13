@@ -98,6 +98,22 @@ function AddPropertyForm() {
             {...register("assetValue", { required: "Asset value is required" })}
           />
 
+          {/* Land Type Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Land Type:
+            </label>
+            <select
+              {...register("landType", { required: "Land Type is required" })}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="">Select Land Type</option>
+              <option value="residential">Residential</option>
+              <option value="agricultural">Agricultural</option>
+              <option value="commercial">Commercial</option>
+            </select>
+          </div>
+
           <Button type="submit" className="w-full cursor-pointer">
             Submit Property Data
           </Button>

@@ -1,5 +1,5 @@
 import conf from "../conf/config";
-import { Client, ID, Databases, Storage, Query } from "appwrite";
+import { Client, ID, Databases, Query } from "appwrite";
 
 export class Service {
   client = new Client();
@@ -51,6 +51,7 @@ export class Service {
     municipality,
     ward,
     assetValue,
+    landType,
     taxAmount,
     paidStatus,
   }) {
@@ -67,12 +68,25 @@ export class Service {
           municipality,
           ward,
           assetValue,
+          landType,
           taxAmount,
           paidStatus,
         }
       );
     } catch (error) {
       console.log("Appwrite serive :: AddProperty :: error", error);
+    }
+  }
+
+  async getProperty(propertyId) {
+    try {
+      return await this.databases.getDocument(
+        conf.appwriteDatabaseId,
+        conf.appwritePropertiesCollectionId,
+        propertyId
+      );
+    } catch (error) {
+      console.log("Appwrite serive :: getProperty :: error", error);
     }
   }
 

@@ -15,6 +15,7 @@ import Properties from "./components/Property/Properties.jsx";
 import AddPropertyForm from "./components/Property/AddPropertyForm.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
+import PropertyView from "./components/Property/PropertyView.jsx";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +75,15 @@ const router = createBrowserRouter([
           <Protected authentication>
             {" "}
             <AddPropertyForm />
+          </Protected>
+        ),
+      },
+      {
+        path: "dashboard/property/propertyView/:slug",
+        element: (
+          <Protected authentication>
+            {" "}
+            <PropertyView />
           </Protected>
         ),
       },
