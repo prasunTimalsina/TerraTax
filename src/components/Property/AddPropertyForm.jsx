@@ -1,11 +1,11 @@
-import Input from "../Input";
-import Button from "../Button";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 
 import authService from "../../appwrite/auth";
 import appwriteService from "../../appwrite/config";
+
+import { Input, Button } from "../index.js";
 
 function AddPropertyForm() {
   const navigate = useNavigate();

@@ -75,6 +75,8 @@ export class Service {
       console.log("Appwrite serive :: AddProperty :: error", error);
     }
   }
+
+  async getProperties(userId) {}
 }
 
 const appwriteService = new Service();

@@ -13,6 +13,8 @@ import LogIn from "./components/LogIn.jsx";
 import UserDetails from "./components/dashboard/UserDetails.jsx";
 import Properties from "./components/Property/Properties.jsx";
 import AddPropertyForm from "./components/Property/AddPropertyForm.jsx";
+import About from "./pages/About.jsx";
+import Contact from "./pages/Contact.jsx";
 
 const router = createBrowserRouter([
   {
@@ -28,8 +30,16 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
-        path: "logIn",
+        path: "/logIn",
         element: <LogIn />,
+      },
+      {
+        path: "/about",
+        element: <About />,
+      },
+      {
+        path: "/contact",
+        element: <Contact />,
       },
       {
         path: "/dashboard",
