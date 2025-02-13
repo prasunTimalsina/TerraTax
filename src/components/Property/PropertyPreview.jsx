@@ -3,7 +3,7 @@ function PropertyPreview({ property }) {
     <div className="max-w-[17rem] p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 self-start">
       <a href="#">
         <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Kitta NO: 2345
+          Kitta NO: {property.propertyId}
         </h5>
       </a>
 

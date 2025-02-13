@@ -76,7 +76,18 @@ export class Service {
     }
   }
 
-  async getProperties(userId) {}
+  async getProperties(userId) {
+    try {
+      return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwritePropertiesCollectionId,
+        [Query.equal("userId", userId)]
+      );
+    } catch (error) {
+      console.log("Appwrite serive :: getProperties :: error", error);
+      return false;
+    }
+  }
 }
 
 const appwriteService = new Service();
