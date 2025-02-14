@@ -1,6 +1,42 @@
 import { Link } from "react-router";
+import PaymentStatusBtn from "./PaymentStatusBtn";
 
 function PropertyPreview({ property }) {
+  let paidStatus = "";
+  //TODO: this break the DRY rule fix this
+  function getPaymentStatus(prevPaidDate) {
+    const paidDate = new Date(prevPaidDate);
+    const now = new Date();
+
+    // Due date: 1 year after paid date
+    const dueDate = new Date(paidDate);
+    dueDate.setFullYear(dueDate.getFullYear() + 1);
+
+    // Upcoming threshold: 1 month before due date
+    const upcomingThreshold = new Date(dueDate);
+    upcomingThreshold.setMonth(upcomingThreshold.getMonth() - 1);
+
+    // Paid period: first 6 months after payment
+    const paidThreshold = new Date(paidDate);
+    paidThreshold.setMonth(paidThreshold.getMonth() + 6);
+
+    if (now >= dueDate) {
+      return "overdue";
+    }
+    if (now >= upcomingThreshold) {
+      return "upcoming";
+    }
+    if (now <= paidThreshold) {
+      return "paid";
+    }
+
+    // If not within first 6 months and not in upcoming period,
+    // you may decide on a default (for example, still "paid")
+    return "paid";
+  }
+
+  paidStatus = property ? getPaymentStatus(property.paidDate) : null;
+
   return (
     <div className="max-w-[17rem] p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 self-start">
       <a href="#">
@@ -31,9 +67,7 @@ function PropertyPreview({ property }) {
         </svg>
       </Link>
 
-      <div className="bg-red-600 w-auto rounded mt-1.5 text-white text-center py-1 px-2">
-        Overdue Payment
-      </div>
+      {<PaymentStatusBtn paidStatus={paidStatus} />}
     </div>
   );
 }

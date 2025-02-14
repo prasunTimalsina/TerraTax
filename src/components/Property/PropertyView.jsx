@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import appwriteService from "../../appwrite/config";
+import PaymentStatusBtn from "./PaymentStatusBtn";
 
 function PropertyView() {
   const [property, setProperty] = useState(null);
+  let paidStatus = "";
   const { slug } = useParams();
   const navigate = useNavigate();
 
@@ -19,6 +21,40 @@ function PropertyView() {
       });
     }
   }, [slug, navigate]);
+
+  /// payment status
+  function getPaymentStatus(prevPaidDate) {
+    const paidDate = new Date(prevPaidDate);
+    const now = new Date();
+
+    // Due date: 1 year after paid date
+    const dueDate = new Date(paidDate);
+    dueDate.setFullYear(dueDate.getFullYear() + 1);
+
+    // Upcoming threshold: 1 month before due date
+    const upcomingThreshold = new Date(dueDate);
+    upcomingThreshold.setMonth(upcomingThreshold.getMonth() - 1);
+
+    // Paid period: first 6 months after payment
+    const paidThreshold = new Date(paidDate);
+    paidThreshold.setMonth(paidThreshold.getMonth() + 6);
+
+    if (now >= dueDate) {
+      return "overdue";
+    }
+    if (now >= upcomingThreshold) {
+      return "upcoming";
+    }
+    if (now <= paidThreshold) {
+      return "paid";
+    }
+
+    // If not within first 6 months and not in upcoming period,
+    // you may decide on a default (for example, still "paid")
+    return "paid";
+  }
+
+  paidStatus = property ? getPaymentStatus(property.paidDate) : null;
 
   return (
     <>
@@ -91,9 +127,8 @@ function PropertyView() {
                     {property.ward}
                   </dd>
                 </div>
-                <div className="bg-red-600 w-auto rounded mt-1.5 text-white text-center py-1 px-2">
-                  Overdue Payment
-                </div>
+
+                {<PaymentStatusBtn paidStatus={paidStatus} />}
               </dl>
             </div>
           </div>
