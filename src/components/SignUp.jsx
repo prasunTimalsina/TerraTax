@@ -2,13 +2,14 @@ import { useState } from "react";
 import authService from "../appwrite/auth";
 import appwriteService from "../appwrite/config";
 import { Link, useNavigate } from "react-router";
-import { login } from "../store/authSlice";
+import { login, persistOnLocalStorage } from "../store/authSlice";
 import Input from "./Input";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 function SignUp() {
   const navigate = useNavigate();
+
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
@@ -24,7 +25,9 @@ function SignUp() {
             ...data,
             userId: userData.$id,
           });
+
           dispatch(login(userData));
+          dispatch(persistOnLocalStorage());
           navigate("/dashboard");
         }
       }

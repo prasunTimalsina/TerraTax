@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { login as authLogin } from "../store/authSlice";
+import { login as authLogin, persistOnLocalStorage } from "../store/authSlice";
 
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
@@ -22,6 +22,7 @@ function LogIn() {
           const userData = await authService.getCurrentUser();
           if (userData) {
             dispatch(authLogin(userData));
+            dispatch(persistOnLocalStorage());
             navigate("/dashboard");
           }
         }, 500);

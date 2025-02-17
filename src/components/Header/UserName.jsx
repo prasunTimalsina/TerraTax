@@ -1,7 +1,8 @@
-import { useSelector } from "react-redux";
-
 function UserName() {
-  const userName = useSelector((state) => state.auth.userData["name"]);
+  /*   const userName = useSelector((state) => state.auth.userData["name"]);
+  console.log(userName); */
+
+  const userName = JSON.parse(window.localStorage.getItem("userData")).name;
   console.log(userName);
 
   return (

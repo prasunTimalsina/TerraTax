@@ -102,6 +102,49 @@ export class Service {
       return false;
     }
   }
+
+  async checkSimilarProperty(propertyId) {
+    try {
+      // Replace "YOUR_DATABASE_ID" and "YOUR_COLLECTION_ID" with your actual IDs.
+      const response = await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwritePropertiesCollectionId,
+        [Query.equal("propertyId", propertyId)]
+      );
+      // If any document is returned, a similar property exists.
+      return response.documents.length > 0;
+    } catch (error) {
+      console.error("Error checking for similar property:", error);
+      throw error;
+    }
+  }
+
+  async addTransactionData({
+    transactionId,
+    propertyId,
+    amount,
+    paymentDate,
+    userId,
+    status,
+  }) {
+    try {
+      return await this.databases.createDocument(
+        conf.appwriteDatabaseId,
+        conf.appwriteTransactionsCollectionId,
+        ID.unique(),
+        {
+          transactionId,
+          propertyId,
+          amount,
+          paymentDate,
+          userId,
+          status,
+        }
+      );
+    } catch (error) {
+      console.log("Appwrite serive :: addTransactionData :: error", error);
+    }
+  }
 }
 
 const appwriteService = new Service();

@@ -13,30 +13,48 @@ function AddPropertyForm() {
 
   const { handleSubmit, register } = useForm();
 
-  const computeTaxAmount = function (assetValue, taxRate = 5) {
-    if (assetValue <= 0 || taxRate < 0) {
-      throw new Error(
-        "Assessed value must be positive and tax rate cannot be negative."
-      );
-    }
-    const value = assetValue * (taxRate / 100);
-    console.log(value);
-    return value;
-  };
+  const computeTaxAmount = function (assessedValue, propertyType) {
+    // Define default rates (as a percentage expressed in decimal form)
+    let taxRate = 0.002; // default for residential (e.g., 0.2%)
 
+    switch (propertyType.toLowerCase()) {
+      case "agricultural":
+        // Agricultural land often has a lower tax rate.
+        taxRate = 0.001; // 0.1%
+        break;
+      case "commercial":
+        // Commercial property usually carries a higher rate.
+        taxRate = 0.003; // 0.3%
+        break;
+      case "residential":
+      default:
+        taxRate = 0.002; // 0.2%
+        break;
+    }
+
+    const taxAmount = assessedValue * taxRate;
+    return taxAmount;
+  };
   const addProperty = async (data) => {
     setError("");
     try {
       const userData = await authService.getCurrentUser();
       if (userData) {
         console.log(userData);
-        appwriteService.addProperty({
-          ...data,
-          userId: userData.$id,
-          taxAmount: computeTaxAmount(data.assetValue + 0.0),
-          assetValue: parseFloat(data.assetValue),
-        });
-        navigate("/dashboard/property");
+        const similar = await appwriteService.checkSimilarProperty(
+          data.propertyId
+        );
+
+        if (!similar) {
+          console.log("adding....");
+          appwriteService.addProperty({
+            ...data,
+            userId: userData.$id,
+            taxAmount: computeTaxAmount(data.assetValue + 0.0, data.landType),
+            assetValue: parseFloat(data.assetValue),
+          });
+          navigate("/dashboard/property");
+        }
       }
     } catch (error) {
       setError(error.message);
@@ -93,7 +111,7 @@ function AddPropertyForm() {
 
           <Input
             label="Asset Value:"
-            placeholder="Enter the asset value"
+            placeholder="Enter the asset value in NPR"
             type="number"
             {...register("assetValue", { required: "Asset value is required" })}
           />

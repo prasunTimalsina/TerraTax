@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   status: false,
   userData: null,
-  userFullData: null,
 };
 
 const authSlice = createSlice({
@@ -14,17 +13,19 @@ const authSlice = createSlice({
       state.status = true;
       state.userData = action.payload;
     },
-    addFullData: (state, action) => {
-      state.userFullData = action.payload.data;
-    },
+
     logout: (state) => {
       state.status = false;
       state.userData = null;
-      state.userFullData = null;
+      window.localStorage.removeItem("userData");
+    },
+
+    persistOnLocalStorage: (state) => {
+      window.localStorage.setItem("userData", JSON.stringify(state.userData));
     },
   },
 });
 
-export const { login, logout, addFullData } = authSlice.actions;
+export const { login, logout, persistOnLocalStorage } = authSlice.actions;
 
 export default authSlice.reducer;

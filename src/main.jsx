@@ -16,6 +16,9 @@ import AddPropertyForm from "./components/Property/AddPropertyForm.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import PropertyView from "./components/Property/PropertyView.jsx";
+import Sucess from "./components/esewa/Sucess.jsx";
+import Failure from "./components/esewa/Failure.jsx";
+import TransactionTable from "./components/Transaction/TransactionTable.jsx";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +87,33 @@ const router = createBrowserRouter([
           <Protected authentication>
             {" "}
             <PropertyView />
+          </Protected>
+        ),
+      },
+      {
+        path: "success",
+        element: (
+          <Protected authentication>
+            {" "}
+            <Sucess />
+          </Protected>
+        ),
+      },
+      {
+        path: "failure",
+        element: (
+          <Protected authentication>
+            {" "}
+            <Failure />
+          </Protected>
+        ),
+      },
+      {
+        path: "dashboard/transactions",
+        element: (
+          <Protected authentication>
+            {" "}
+            <TransactionTable />
           </Protected>
         ),
       },
