@@ -119,6 +119,21 @@ export class Service {
     }
   }
 
+  async updatePayDate(documentId, newPayDate) {
+    try {
+      const updatedDocument = await this.databases.updateDocument(
+        conf.appwriteDatabaseId,
+        conf.appwritePropertiesCollectionId,
+        documentId,
+        { paidDate: newPayDate }
+      );
+      return updatedDocument;
+    } catch (error) {
+      console.error("Error updating payDate:", error);
+      throw error; // Rethrow the error after logging it
+    }
+  }
+
   async addTransactionData({
     transactionId,
     propertyId,
@@ -143,6 +158,19 @@ export class Service {
       );
     } catch (error) {
       console.log("Appwrite serive :: addTransactionData :: error", error);
+    }
+  }
+
+  async getTransactions(userId) {
+    try {
+      return await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteTransactionsCollectionId,
+        [Query.equal("userId", userId)]
+      );
+    } catch (error) {
+      console.log("Appwrite service :: getTransactions :: error", error);
+      return false;
     }
   }
 }

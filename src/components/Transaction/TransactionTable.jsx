@@ -1,4 +1,19 @@
+import { useEffect, useState } from "react";
+import appwriteService from "../../appwrite/config";
+
 function TransactionTable() {
+  const userId = JSON.parse(window.localStorage.getItem("userData")).$id;
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    appwriteService.getTransactions(userId).then((data) => {
+      if (data) {
+        console.log(data.documents);
+        setTransactions(data.documents);
+      }
+    });
+  }, [transactions, userId]);
+
   return (
     <div className="mx-auto mt-8 max-w-screen-xl px-2  p-10 h-[90vh]">
       <p className="text-base font-bold text-white">Latest Payments</p>
@@ -8,48 +23,55 @@ function TransactionTable() {
           <thead className="border-b">
             <tr>
               <td
-                width="50%"
-                className="whitespace-normal py-4 text-sm font-medium text-gray-500 px-6"
+                width="20%"
+                className="whitespace-normal py-4 text-sm  text-gray-500 px-6 font-bold"
               >
                 Kitta No.
               </td>
-              <td className="whitespace-normal py-4 text-sm font-medium text-gray-500 px-4">
+              <td className="whitespace-normal py-4 text-sm  text-gray-500 px-4 font-bold">
                 Payment Date
               </td>
-              <td className="whitespace-normal py-4 text-sm font-medium text-gray-500 px-6">
+              <td className="whitespace-normal py-4 text-sm  text-gray-500 px-6 text-center font-bold">
                 Amount
               </td>
-              <td className="whitespace-normal py-4 text-sm font-medium text-gray-500 px-6">
+              <td className="whitespace-normal py-4 text-sm  text-gray-500 px-6 text-center font-bold">
                 Transaction Id
               </td>
-              <td className="whitespace-normal py-4 text-sm font-medium text-gray-500 px-6">
+              <td className="whitespace-normal py-4 text-sm  text-gray-500 px-6 font-bold">
                 Status
               </td>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td
-                width="50%"
-                className="whitespace-no-wrap py-4 text-sm font-bold text-gray-900 px-6"
-              >
-                Basic Plan - Oct 2021
-              </td>
-              <td className="whitespace-no-wrap py-4 text-sm font-normal text-gray-500 px-4">
-                15 October, 2021
-              </td>
-              <td className="whitespace-no-wrap py-4 text-right text-sm text-gray-600 px-6 ">
-                $29.00
-              </td>
-              <td className="whitespace-no-wrap py-4 text-right text-sm text-gray-600 px-6 ">
-                k43j5k4l5k34l5j34l5
-              </td>
-              <td className="whitespace-no-wrap py-4 text-sm font-normal text-gray-500 px-6">
-                <div className="inline-flex items-center rounded-full bg-blue-600 py-2 px-3 text-xs text-white">
-                  Complete
-                </div>
-              </td>
-            </tr>
+            {transactions.map((transaction) => (
+              <tr key={transaction.transactionId}>
+                <td
+                  width="20%"
+                  className="whitespace-no-wrap py-4 text-sm font-bold text-gray-900 px-6"
+                >
+                  {transaction.propertyId}
+                </td>
+                <td className="whitespace-no-wrap py-4 text-sm font-normal text-gray-500 px-4">
+                  {
+                    new Date(transaction.paymentDate)
+                      .toISOString()
+                      .split("T")[0]
+                  }
+                </td>
+                <td className="whitespace-no-wrap py-4  text-sm text-gray-600 px-6 text-center">
+                  <strong>NPR </strong>
+                  {transaction.amount.toFixed(2)}
+                </td>
+                <td className="whitespace-no-wrap py-4  text-sm text-gray-600 px-6 text-center">
+                  {transaction.transactionId}
+                </td>
+                <td className="whitespace-no-wrap py-4 text-sm font-normal text-gray-500 px-6">
+                  <div className="inline-flex items-center rounded-full bg-blue-600 py-2 px-3 text-xs text-white">
+                    {transaction.status}
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
